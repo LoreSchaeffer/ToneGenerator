@@ -1,7 +1,5 @@
 package it.multicoredev.music;
 
-import java.io.File;
-
 /**
  * Copyright © 2019 by Lorenzo Magni
  * This file is part of Music.
@@ -22,9 +20,29 @@ import java.io.File;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Main {
-    public static void main(String[] args) throws Exception {
-        MidiReader midiReader = new MidiReader(new File("Gurenge2.mid"));
-        midiReader.read();
+public enum Duration {
+    SEMIBREVE(1f),              // 4/4
+    SEMIBREVE_DOTTED(SEMIBREVE.getDuration() + (SEMIBREVE.getDuration() / 2)),
+    MINIMA(0.5f),               // 2/4
+    MINIMA_DOTTED(MINIMA.getDuration() + (MINIMA.getDuration() / 2)),
+    SEMIMINIMA(0.25f),          // 1/4
+    SEMIMINIMA_DOTTED(SEMIMINIMA.getDuration() + (SEMIMINIMA.getDuration() / 2)),
+    CROMA(0.125f),              // 1/8
+    CROMA_DOTTED(CROMA.getDuration() + (CROMA.getDuration() / 2)),
+    SEMICROMA(0.0625f),         // 1/16
+    SEMICROMA_DOTTED(SEMICROMA.getDuration() + (SEMICROMA.getDuration() / 2)),
+    BISCROMA(0.03125f),         // 1/32
+    BISCROMA_DOTTED(BISCROMA.getDuration() + (BISCROMA.getDuration() / 2)),
+    SEMIBISCROMA(0.015625f),    // 1/64
+    SEMIBISCROMA_DOTTED(SEMIBISCROMA.getDuration() + (SEMIBISCROMA.getDuration() / 2));
+
+    private float duration;
+
+    Duration(float duration) {
+        this.duration = duration;
+    }
+
+    public float getDuration() {
+        return duration;
     }
 }

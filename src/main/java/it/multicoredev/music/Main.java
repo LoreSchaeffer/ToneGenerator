@@ -24,7 +24,8 @@ import java.io.File;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        MidiReader midiReader = new MidiReader(new File("Gurenge2.mid"));
+        MidiReader midiReader = new MidiReader(new File("Gurenge.mid"));
+        midiReader.setSpeed(1f);
         midiReader.read();
     }
 }

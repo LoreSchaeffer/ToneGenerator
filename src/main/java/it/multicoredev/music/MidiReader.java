@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static it.multicoredev.music.SoundGenerator.*;
+import static javax.sound.midi.ShortMessage.NOTE_ON;
 
 /**
  * Copyright © 2019 by Lorenzo Magni
@@ -30,17 +31,23 @@ public class MidiReader {
     private final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
     private File midi;
+    private float speed = 1;
+    private int[] trackTick;
+    private int[] trackVelocity;
 
     public MidiReader(File midi) {
         this.midi = midi;
     }
 
-    public void read() throws IOException, InvalidMidiDataException {
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void read() throws IOException, InvalidMidiDataException, InterruptedException {
         Sequence sequence = MidiSystem.getSequence(midi);
 
         long totalTick = sequence.getTickLength();
-        long totalTime = sequence.getMicrosecondLength() - 30000000;
-        float divisionType = sequence.getDivisionType();
+        double totalTime = sequence.getMicrosecondLength() * speed;
         Track[] tracks = sequence.getTracks();
 
         for (int i = 0; i < tracks.length; i++) {
@@ -50,7 +57,7 @@ public class MidiReader {
         }
     }
 
-    private void readTrack(Track track, long totalTick, long totalTime) {
+    private void readTrack(Track track, long totalTick, double totalTime) {
         long tickTime = 0;
         int prevVelocity = 0;
 
@@ -98,5 +105,14 @@ public class MidiReader {
                 }
             }
         }
+    }
+
+    private int getLongestTrackSize(Track[] tracks) {
+        int max = 0;
+        for (Track track : tracks) {
+            if (max < track.size()) max = track.size();
+        }
+
+        return max;
     }
 }
